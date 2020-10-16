@@ -2,7 +2,7 @@ import path from 'path';
 import crypto from 'crypto';
 import multer from 'multer';
 
-const tmpFolder = path.resolve(__dirname, '..', '..', 'tmp')
+const tmpFolder = path.resolve(__dirname, '..', '..', 'tmp');
 
 export default {
   directory: tmpFolder,
@@ -14,6 +14,6 @@ export default {
       const fileName = `${fileHash}-${file.originalname}`;
 
       return callbak(null, fileName);
-    }
+    },
   }),
 };

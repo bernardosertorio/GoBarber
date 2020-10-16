@@ -20,7 +20,7 @@ class CreateUserService {
     });
 
     if (checkUserExists) {
-      throw new AppError('Email address already used.')
+      throw new AppError('Email address already used.');
     }
 
     const hashedPassword = await hash(password, 8);
@@ -31,8 +31,10 @@ class CreateUserService {
       password: hashedPassword,
     });
 
-    await usersRepository.save(user)
+    await usersRepository.save(user);
 
     return user;
   }
 }
+
+export default CreateUserService;

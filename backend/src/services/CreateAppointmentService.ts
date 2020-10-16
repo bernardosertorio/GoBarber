@@ -15,7 +15,7 @@ class CreateAppointmentService {
   public async excute({ date, provider_id }: Request): Promise<Appointment> {
     const appointmentsRepository = getCustomRepository(AppointmentsRepository);
 
-    const appointmentDate = startOfHour(date)
+    const appointmentDate = startOfHour(date);
 
     const findAppointmentInSameDate = await appointmentsRepository.findByDate(
       appointmentDate,

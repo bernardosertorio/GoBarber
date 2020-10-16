@@ -3,7 +3,8 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn } from 'typeorm';
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('users')
 class User {
