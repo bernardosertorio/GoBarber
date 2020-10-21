@@ -1,10 +1,8 @@
-
 import { verify } from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
 import authConfig from '../config/auth';
 
 import AppError from '../errors/AppError';
-
-import { NextFunction } from 'express';
 
 interface TokenPayload {
   iat: number;
@@ -32,10 +30,10 @@ export default function ensureAuthenticated(
 
     request.user = {
       id: sub,
-    }
+    };
 
     return next();
-  }catch {
+  } catch {
     throw new AppError('Invalid JWT token', 401);
   }
 }
