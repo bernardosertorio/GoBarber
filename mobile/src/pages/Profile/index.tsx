@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback } from "react";
 import {
   View,
   ScrollView,
@@ -6,18 +6,19 @@ import {
   Platform,
   TextInput,
   Alert,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { Form } from '@unform/mobile';
-import { FormHandles } from '@unform/core';
-import * as Yup from 'yup';
-import Icon from 'react-native-vector-icons/Feather';
-import api from '../../services/api';
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Form } from "@unform/mobile";
+import { FormHandles } from "@unform/core";
+import * as Yup from "yup";
+import Icon from "react-native-vector-icons/Feather";
+import ImagePicker from 'react-native-image-picker';
+import api from "../../services/api";
 
-import getValidationErrors from '../../utils/getValidationErrors';
+import getValidationErrors from "../../utils/getValidationErrors";
 
-import Input from '../../components/Input';
-import Button from '../../components/Button';
+import Input from "../../components/Input";
+import Button from "../../components/Button";
 
 import {
   Container,
@@ -25,8 +26,8 @@ import {
   UserAvatarButton,
   UserAvatar,
   BackButton,
-} from './styles';
-import { useAuth } from '../../hooks/auth';
+} from "./styles";
+import { useAuth } from "../../hooks/auth";
 
 interface ProfileFormData {
   name: string;
@@ -53,23 +54,23 @@ const SignUp: React.FC = () => {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          name: Yup.string().required('Nome obrigatório'),
+          name: Yup.string().required("Nome obrigatório"),
           email: Yup.string()
-            .required('E-mail obrigatório')
-            .email('Digite um e-mail válido'),
+            .required("E-mail obrigatório")
+            .email("Digite um e-mail válido"),
           old_password: Yup.string(),
-          password: Yup.string().when("old_password", {
+          password: Yup.string().when('old_password', {
             is: (val) => !!val.length,
-            then: Yup.string().required("Campo obrigatório"),
+            then: Yup.string().required('Campo obrigatório'),
             otherwise: Yup.string(),
           }),
           password_confirmation: Yup.string()
-            .when("old_password", {
+            .when('old_password', {
               is: (val) => !!val.length,
-              then: Yup.string().required("Campo obrigatório"),
+              then: Yup.string().required('Campo obrigatório'),
               otherwise: Yup.string(),
             })
-            .oneOf([Yup.ref("password"), null], "Confirmação incorreta"),
+            .oneOf([Yup.ref('password'), null], 'Confirmação incorreta'),
         });
 
         await schema.validate(data, {
@@ -92,11 +93,11 @@ const SignUp: React.FC = () => {
             : {}),
         };
 
-        const response = await api.put("/profile", formData);
+        const response = await api.put('/profile', formData);
 
         updateUser(response.data);
 
-        Alert.alert('Perfil atualizado com sucesso!');
+        Alert.alert("Perfil atualizado com sucesso!");
 
         navigation.goBack();
       } catch (err) {
@@ -108,13 +109,46 @@ const SignUp: React.FC = () => {
           return;
         }
         Alert.alert(
-          'Erro ao atualizar o perfil',
-          'Ocorreu um erro ao atualizar seu perfil, tente novamente.'
+          "Erro ao atualizar o perfil",
+          "Ocorreu um erro ao atualizar seu perfil, tente novamente."
         );
       }
     },
-    [navigation]
+    [navigation, updateUser],
   );
+
+  const handleUpdateAvatar = useCallback(() => {
+    ImagePicker.showImagePicker(
+      {
+        title: 'Selecione um avatar',
+        cancelButtonTitle: 'Cancelar',
+        takePhotoButtonTitle: 'Usar câmera',
+        chooseFromLibraryButtonTitle: 'Escolha da galeria',
+      },
+      (response) => {
+        if (response.didCancel) {
+          return;
+        }
+
+        if (response.error) {
+          Alert.alert("Erro ao atualizar seu avatar.");
+          return;
+        }
+
+        const data = new FormData();
+
+        data.append('avatar', {
+          type: 'image/jpeg',
+          name: `${user.id}.jpg`,
+          uri: response.uri,
+        });
+
+        api.patch('users/avatar', data).then((apiResponse) => {
+          updateUser(apiResponse.data);
+        });
+      },
+    );
+  }, [updateUser, user.id]);
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
@@ -124,7 +158,7 @@ const SignUp: React.FC = () => {
     <>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         enabled
       >
         <ScrollView
@@ -136,7 +170,7 @@ const SignUp: React.FC = () => {
               <Icon name="chevron-left" size={24} color="#999591" />
             </BackButton>
 
-            <UserAvatarButton onPress={() => {}}>
+            <UserAvatarButton onPress={handleUpdateAvatar}>
               <UserAvatar source={{ uri: user.avatar_url }} />
             </UserAvatarButton>
 
