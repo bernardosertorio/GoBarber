@@ -1,10 +1,10 @@
-import { createConfigItem } from '@babel/core';
-import { useNavigation } from '@react-navigation/native';
-import Icon from "@react-native-vector-icons/Feather";
-import React, { useCallback, useEffect, useState } from 'react';
+import { createConfigItem } from "@babel/core";
+import { useNavigation } from "@react-navigation/native";
+import Icon from '@react-native-vector-icons/Feather';
+import React, { useCallback, useEffect, useState } from "react";
 
-import { useAuth } from "../../hooks/auth";
-import api from "../../services/api";
+import { useAuth } from '../../hooks/auth';
+import api from '../../services/api';
 
 import {
   Container,
@@ -21,7 +21,7 @@ import {
   ProviderName,
   ProvaiderMeta,
   ProviderMetaText,
-} from './styles';
+} from "./styles";
 
 export interface Provider {
   id: string;
@@ -32,24 +32,24 @@ export interface Provider {
 const Dashboard: React.FC = () => {
   const [providers, setProviders] = useState<Provider[]>([]);
 
-  const { signOut, user } = useAuth();
+  const { user } = useAuth();
   const { navigate } = useNavigation();
 
   useEffect(() => {
-    api.get('providers').then((response) => {
+    api.get("providers").then((response) => {
       setProviders(response.data);
     });
   }, []);
 
   const navigateToProfile = useCallback(() => {
-    navigate('Profile');
+    navigate("Profile");
   }, [navigate]);
 
   const navigateToCreateAppointment = useCallback(
     (providerId: string) => {
-      navigate('CreateAppointment', { providerId });
+      navigate("CreateAppointment", { providerId });
     },
-    [navigate]
+    [navigate],
   );
 
   return (
@@ -57,7 +57,7 @@ const Dashboard: React.FC = () => {
       <Header>
         <HeaderTitle>
           Bem vindo,
-          {"\n"}
+          {'\n'}
           <UserName>{user.name}</UserName>
         </HeaderTitle>
 
