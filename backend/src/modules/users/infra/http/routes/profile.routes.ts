@@ -25,4 +25,4 @@ profileRouter.put(
   profileController.update,
 );
 
-export default usersRouter;
+export default profileRouter;
