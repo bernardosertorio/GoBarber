@@ -21,6 +21,7 @@
     ],
     "rules": {
       "no-underscore-dangle": "off",
+      "camelcase": "off",
       "prettier/prettier": "error",
       "class-methods-use-this": "off",
       "no-useless-constructor": "off",
@@ -39,7 +40,9 @@
     },
     "settings": {
       "import/resolver": {
-        "typescript": {}
+        "node": {
+          "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        }
       }
     }
 }
